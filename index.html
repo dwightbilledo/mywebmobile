@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Tap Presentation</title>
+
+<style>
+
+body{
+margin:0;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+overflow:hidden;
+}
+
+/* 9:16 canvas */
+#canvas{
+position:relative;
+height:100vh;
+aspect-ratio:9/16;
+max-width:100vw;
+background:black;
+overflow:hidden;
+}
+
+/* videos fill the canvas */
+video{
+position:absolute;
+width:100%;
+height:100%;
+object-fit:cover;
+display:none;
+}
+
+.active{
+display:block;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="canvas">
+
+<video class="active" src="welcome.mp4" autoplay muted playsinline></video>
+<video src="about.mp4" autoplay muted playsinline></video>
+<video src="education.mp4" autoplay muted playsinline></video>
+<video src="work.mp4" autoplay muted playsinline></video>
+<video src="thanks.mp4" autoplay muted playsinline></video>
+
+</div>
+
+<script>
+
+const videos = document.querySelectorAll("video");
+const canvas = document.getElementById("canvas");
+
+let current = 0;
+
+function showVideo(index){
+
+videos.forEach((v,i)=>{
+
+if(i===index){
+v.classList.add("active");
+v.currentTime = 0;
+v.play();
+}else{
+v.classList.remove("active");
+v.pause();
+}
+
+});
+
+}
+
+canvas.addEventListener("click",function(e){
+
+const rect = canvas.getBoundingClientRect();
+const clickX = e.clientX - rect.left;
+
+/* LEFT SIDE */
+if(clickX < rect.width/2){
+
+current--;
+
+if(current < 0){
+current = videos.length - 1;
+}
+
+/* RIGHT SIDE */
+}else{
+
+current++;
+
+if(current >= videos.length){
+current = 0;
+}
+
+}
+
+showVideo(current);
+
+});
+
+</script>
+
+</body>
+</html>
